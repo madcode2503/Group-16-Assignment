@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Booking_list",
+            "request": "launch",
+            "mainClass": "Src.Booking_list",
+            "projectName": "Assignment_e22afdff"
+        },
+        {
+            "type": "java",
+            "name": "New_booking2",
+            "request": "launch",
+            "mainClass": "Src.New_booking2",
+            "projectName": "Assignment_e22afdff"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        }
+    ]
+}
