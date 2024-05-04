@@ -112,11 +112,11 @@ public class Booking_list extends JFrame implements ActionListener {
             e.printStackTrace();
         }
         JScrollPane jsp = new JScrollPane(tb);
-        jsp.setBounds(0, 150, 1100, 340);
+        jsp.setBounds(0, 150, 1300, 340);
         add(jsp);
         setVisible(true);
-        setSize(1100, 500);
-        setLocation(250, 100);
+        setSize(1300, 500);
+        setLocation(120, 100);
     }
 
     public void actionPerformed(ActionEvent ae) {
