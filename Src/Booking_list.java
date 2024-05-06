@@ -176,7 +176,7 @@ public class Booking_list extends JFrame implements ActionListener {
         }
         else if(msg.equals("Update client booking")){
                  setVisible(false);
-                //  new Update_client_booking();
+                new Update_booking();
         }
         if (ae.getSource() == search) {
             try {
