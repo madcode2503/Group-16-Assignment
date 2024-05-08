@@ -67,8 +67,8 @@ public class Booking_list extends JFrame implements ActionListener {
         extra_opt.add(update);
         mb.add(extra_opt);
         setJMenuBar(mb);
-        JLabel heading = new JLabel("Client bookings");
-        heading.setBounds(480, 5, 200, 50);
+        JLabel heading = new JLabel("Client booking list");
+        heading.setBounds(550, 5, 200, 50);
         heading.setFont(new Font("serif", Font.BOLD, 25));
         add(heading);
         JLabel lb_search = new JLabel("Choose room number");

@@ -33,7 +33,7 @@ public class Room_list extends JFrame implements ActionListener {
         JMenuBar mb = new JMenuBar();
         JMenu list = new JMenu("List");
         list.setForeground(Color.blue);
-        b_list = new JMenuItem("Client bookings");
+        b_list = new JMenuItem("Client booking list");
         b_list.addActionListener(this);
         list.add(b_list);
         c_list = new JMenuItem("Client profile list");
@@ -157,7 +157,7 @@ public class Room_list extends JFrame implements ActionListener {
         } else if (ae.getSource() == cancel) {
             setVisible(false);
             new Homepage();
-        } else if (msg.equals("Client bookings")) {
+        } else if (msg.equals("Client booking list")) {
             setVisible(false);
             new Booking_list();
         } else if (msg.equals("Client profile list")) {
