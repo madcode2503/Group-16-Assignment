@@ -103,7 +103,7 @@ public class Client_List extends JFrame implements ActionListener {
     }
     public void actionPerformed(ActionEvent ae) {
         String msg= ae.getActionCommand();
-        if (msg.equals("Client booking list")) {
+        if (msg.equals("Client bookings")) {
             setVisible(false);
             new Booking_list();
         } else if (msg.equals("Room list")) {
