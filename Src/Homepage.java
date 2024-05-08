@@ -29,7 +29,7 @@ public class Homepage extends JFrame implements ActionListener {
         new_booking.addActionListener(this);
         newInformation.add(new_booking);
         mb.add(newInformation);
-        JMenu admin = new JMenu("Admin");
+        JMenu admin = new JMenu("View details");
         b_list=new JMenuItem("Client booking list");
         b_list.addActionListener(this);
         admin.add(b_list);
