@@ -62,7 +62,7 @@ public class Booking_list extends JFrame implements ActionListener {
         add_c = new JMenuItem("New booking");
         add_c.addActionListener(this);
         extra_opt.add(add_c);
-        update = new JMenuItem("Update client booking ");
+        update = new JMenuItem("Update client booking");
         update.addActionListener(this);
         extra_opt.add(update);
         mb.add(extra_opt);
@@ -175,10 +175,10 @@ public class Booking_list extends JFrame implements ActionListener {
             new New_booking2();
         }
         else if(msg.equals("Update client booking")){
-                 setVisible(false);
+                setVisible(false);
                 new Update_booking();
         }
-        if (ae.getSource() == search) {
+        else if (ae.getSource() == search) {
             try {
                 DB db = new DB();
                 ResultSet rs = db.s
