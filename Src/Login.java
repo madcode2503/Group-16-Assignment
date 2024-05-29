@@ -35,7 +35,6 @@ public class Login extends JFrame implements ActionListener {
         tf_username = new JTextField();
         tf_username.setBounds(150, 40, 150, 20);
         add(tf_username);
-
         JLabel lb_password = new JLabel("Password");
         lb_password.setBounds(40, 90, 100, 20);
         add(lb_password);

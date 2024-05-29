@@ -7,6 +7,9 @@ import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -31,12 +34,10 @@ public class New_booking2 extends JFrame implements ActionListener {
     JLabel lbtime;
     JLabel lbid;
     @SuppressWarnings("rawtypes")
-    JComboBox cb_ac, cbrnum, cbtime, cbprj, cbspk, cbmic;
+    JComboBox cb_ac, cbrnum, cbtime, cbtime2, cbprj, cbspk, cbmic;
     JButton submit;
     JButton cancel;
     JRadioButton rb;
-    Random r = new Random();
-    int idnum = Math.abs(r.nextInt(1000, 9999));
 
     @SuppressWarnings("unchecked")
     New_booking2() {
@@ -48,12 +49,12 @@ public class New_booking2 extends JFrame implements ActionListener {
         heading.setFont(new Font("serif", Font.BOLD, 30));
         add(heading);
         rb = new JRadioButton();
-        rb.setBounds(750, 55, 20, 15);
+        rb.setBounds(900, 55, 20, 15);
         rb.setBackground(Color.white);
         rb.addActionListener(this);
         add(rb);
         JLabel av_only = new JLabel("Display available only");
-        av_only.setBounds(780, 55, 150, 15);
+        av_only.setBounds(930, 55, 150, 15);
         add(av_only);
         JLabel c_id = new JLabel("Client ID");
         c_id.setBounds(20, 15, 200, 180);
@@ -81,12 +82,14 @@ public class New_booking2 extends JFrame implements ActionListener {
         phone.setBounds(20, 95, 200, 180);
         phone.setFont(new Font("serif", Font.BOLD, 17));
         add(phone);
-        Date date = new Date();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime date = LocalDateTime.now();
+        String text = date.format(formatter);
         JLabel b_time = new JLabel("Booking time");
         b_time.setBounds(280, 55, 200, 180);
         b_time.setFont(new Font("serif", Font.BOLD, 17));
         add(b_time);
-        lbtime = new JLabel("" + date);
+        lbtime = new JLabel("" + text);
         lbtime.setBounds(400, 57, 200, 180);
         add(lbtime);
         JLabel com = new JLabel("Company");
@@ -133,10 +136,18 @@ public class New_booking2 extends JFrame implements ActionListener {
         cbrnum.setBounds(120, 215, 120, 25);
         cbrnum.addActionListener(this);
         add(cbrnum);
-        cbtime = new JComboBox<>(timestr());
+        cbtime = new JComboBox<>(timestr(8));
         cbtime.setBounds(400, 175, 120, 25);
         cbtime.addActionListener(this);
         add(cbtime);
+        JLabel sym = new JLabel("-");
+        sym.setFont(new Font("serif", Font.BOLD, 45));
+        sym.setBounds(530, 170, 80, 20);
+        add(sym);
+        cbtime2 = new JComboBox<>(timestr(9));
+        cbtime2.setBounds(555, 175, 120, 25);
+        cbtime2.addActionListener(this);
+        add(cbtime2);
         cbprj = new JComboBox<>(choices);
         cbprj.setBounds(120, 255, 120, 25);
         cbprj.addActionListener(this);
@@ -153,6 +164,7 @@ public class New_booking2 extends JFrame implements ActionListener {
         cbspk.setBounds(400, 255, 120, 25);
         cbspk.addActionListener(this);
         add(cbspk);
+        
         submit = new JButton("Submit");
         submit.setFont(new Font("serif", Font.BOLD, 20));
         submit.setBackground(Color.pink);
@@ -183,21 +195,19 @@ public class New_booking2 extends JFrame implements ActionListener {
             e.printStackTrace();
         }
         JScrollPane jsp = new JScrollPane(table);
-        jsp.setBounds(640, 97, 350, 305);
+        jsp.setBounds(740, 97, 350, 305);
         add(jsp);
-        setSize(1000, 440);
-        setLocation(350, 150);
+        setSize(1100, 440);
+        setLocation(250, 150);
         setVisible(true);
     }
 
-    public String[] timestr() {
-        String[] harray = new String[49];
-        for (int hour = 0; hour < 24; hour++) {
-            for (int mnt = 0; mnt <= 30; mnt += 30) {
-                if (mnt == 0) {
-                    harray[hour * 2] = hour + ":00";
-                }
-                harray[hour * 2 + 1] = hour + ":" + mnt;
+    public String[] timestr(int n) {
+        String[] harray = new String[32];
+        int index = 0;
+        for (int hour = n; hour < 24; hour++) {
+            for (int mnt = 0; mnt < 60; mnt += 30) {
+                harray[index++] = String.format("%02d:%02d", hour, mnt);
             }
         }
         return harray;
@@ -215,13 +225,14 @@ public class New_booking2 extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getSource() == submit) {
+         if (ae.getSource() == submit) {
             String id = lbid.getText();
             String name = tfname.getText();
             String phone = tfphone.getText();
             String com = tfcom.getText();
             String b_date = lbtime.getText();
             String m_time = (String) cbtime.getSelectedItem();
+            String m_time2 = (String) cbtime2.getSelectedItem();
             String rnum = (String) cbrnum.getSelectedItem();
             String ac = (String) cb_ac.getSelectedItem();
             String prj = (String) cbprj.getSelectedItem();
@@ -232,13 +243,14 @@ public class New_booking2 extends JFrame implements ActionListener {
                 DB db = new DB();
                 String query = "Insert into booking values('" + id + "','" + name + "','" + phone + "','" + com + "','"
                         + b_date
-                        + "','" + rnum + "','" + m_time + "','" + prj + "','" + ac + "','" + spk
+                        + "','" + rnum + "','" + m_time + "-" + m_time2 + "','" + prj + "','" + ac + "','" + spk
                         + "','" + mic + "')";
-                String query1 = "Insert into clients values('" + id + "','" + name + "','" + phone + "','" + com + "')";
-                String query2 = "UPDATE rooms SET ROOM_STATUS='Booked', MEETING_TIME='" + m_time +
-                        "', NUM_PROJs='" + prj + "', NUM_ACs='" + ac + "', NUM_SPKs='" + spk +
-                        "', NUM_MICs='" + mic + "' WHERE ROOM_NUMBER='" + rnum + "'";
-                String query3="Update id SET STT='Unavailable' where ID='"+id+"'";
+                String query1 = "Insert into clients values('" + id + "','" + name + "','" + phone + "','" + com + ",'"+rnum+"'')";
+                String query2 = "UPDATE rooms SET ROOM_STATUS='Booked', MEETING_TIME='" + m_time + "-" + m_time2
+                        + "', PROJECTOR='" + prj + "', A_Cs='" + ac + "', SPEAKERS='" + spk +
+                        "', MICROPHONES='" + mic + "',C_ID='"+id+"' WHERE ROOM_NUMBER='" + rnum + "'";
+                String query3 = "Update id SET STT='Unavailable' where ID='" + id + "'";
+               
                 db.s.executeUpdate(query);
                 db.s.executeUpdate(query1);
                 db.s.executeUpdate(query2);
@@ -273,8 +285,9 @@ public class New_booking2 extends JFrame implements ActionListener {
         }
     }
 
-    public static void main(String[] args) {
-        new New_booking2();
-    }
+    // public static void main(String[] args) {
+    // new New_booking2();
+    // }
 
 }
+

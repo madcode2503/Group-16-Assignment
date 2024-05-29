@@ -121,7 +121,7 @@ public class Room_list extends JFrame implements ActionListener {
         tb = new JTable();
         try {
             DB db = new DB();
-            ResultSet rs = db.s.executeQuery("Select * from rooms");
+            ResultSet rs = db.s.executeQuery("Select ROOM_NUMBER , ROOM_STATUS,MEETING_TIME,PROJECTOR,A_Cs,SPEAKERS,MICROPHONES from rooms");
             tb.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -141,7 +141,7 @@ public class Room_list extends JFrame implements ActionListener {
             try {
                 DB db = new DB();
                 ResultSet rs = db.s
-                        .executeQuery("Select * from rooms where ROOM_NUMBER='" + c_rnum.getSelectedItem() + "'");
+                        .executeQuery("Select ROOM_NUMBER , ROOM_STATUS,MEETING_TIME,PROJECTOR,A_Cs,SPEAKERS,MICROPHONES from rooms where ROOM_NUMBER='" + c_rnum.getSelectedItem() + "'");
                 tb.setModel(DbUtils.resultSetToTableModel(rs));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -149,7 +149,7 @@ public class Room_list extends JFrame implements ActionListener {
         } else if (ae.getSource() == refresh) {
             try {
                 DB db = new DB();
-                ResultSet rs = db.s.executeQuery("Select * from rooms");
+                ResultSet rs = db.s.executeQuery("Select ROOM_NUMBER , ROOM_STATUS,MEETING_TIME,PROJECTOR,A_Cs,SPEAKERS,MICROPHONES from rooms");
                 tb.setModel(DbUtils.resultSetToTableModel(rs));
             } catch (Exception e) {
 
@@ -166,7 +166,7 @@ public class Room_list extends JFrame implements ActionListener {
         } else if (msg.equals("Ascending Order")) {
             try {
                 DB db = new DB();
-                ResultSet rs = db.s.executeQuery("select * from rooms order by ROOM_NUMBER ASC;");
+                ResultSet rs = db.s.executeQuery("selectROOM_NUMBER , ROOM_STATUS,MEETING_TIME,PROJECTOR,A_Cs,SPEAKERS,MICROPHONES from rooms order by ROOM_NUMBER ASC;");
                 tb.setModel(DbUtils.resultSetToTableModel(rs));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -174,7 +174,7 @@ public class Room_list extends JFrame implements ActionListener {
         } else if (msg.equals("Descending Order")) {
             try {
                 DB db = new DB();
-                ResultSet rs = db.s.executeQuery("select * from rooms order by ROOM_NUMBER DESC;");
+                ResultSet rs = db.s.executeQuery("select ROOM_NUMBER , ROOM_STATUS,MEETING_TIME,PROJECTOR,A_Cs,SPEAKERS,MICROPHONES from rooms order by ROOM_NUMBER DESC;");
                 tb.setModel(DbUtils.resultSetToTableModel(rs));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -183,10 +183,14 @@ public class Room_list extends JFrame implements ActionListener {
             String r_num = c_rnum.getSelectedItem();
             DB db = new DB();
             try {
-
-                String query = "Update  rooms Set ROOM_STATUS='Available',MEETING_TIME='N/A',NUM_PROJs='0',NUM_PROJs='0',NUM_PROJs='0',NUM_ACs='0',NUM_SPKs='0',NUM_MICs='0' where ROOM_NUMBER='"
+                String query1 = " Delete from booking b where ROOM_NUMBER='"
                         + r_num + "'";
+                String query = "Update  rooms  Set ROOM_STATUS='Available',MEETING_TIME='N/A',PROJECTOR='0',A_Cs='0',SPEAKERS='0',MICROPHONES='0',C_ID='N/A' where ROOM_NUMBER='"
+                        + r_num + "'";
+                String query3= "Delete from clients where ROOM_NUMBER='"+r_num+"'";
                 db.s.executeUpdate(query);
+                db.s.executeUpdate(query1);
+                db.s.executeUpdate(query3);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -203,8 +207,12 @@ public class Room_list extends JFrame implements ActionListener {
         } else if (msg.equals("Release all rooms")) {
             DB db = new DB();
             try {
-                String query = "Update  rooms Set ROOM_STATUS='Available',MEETING_TIME='N/A',NUM_PROJs='0',NUM_PROJs='0',NUM_PROJs='0',NUM_ACs='0',NUM_SPKs='0',NUM_MICs='0'";
+                String query1 = " Delete from booking ";
+                String query = "Update  rooms  Set ROOM_STATUS='Available',MEETING_TIME='N/A',PROJECTOR='0',A_Cs='0',SPEAKERS='0',MICROPHONES='0',C_ID='N/A'";
+                String query2="Delete from clients";
                 db.s.executeUpdate(query);
+                db.s.executeUpdate(query1);
+                db.s.executeUpdate(query2);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -221,7 +229,7 @@ public class Room_list extends JFrame implements ActionListener {
             try {
                 DB db = new DB();
                 ResultSet rs = db.s
-                        .executeQuery("Select * from rooms Where ROOM_STATUS='Available'");
+                        .executeQuery("Select ROOM_NUMBER , ROOM_STATUS,MEETING_TIME,PROJECTOR,A_Cs,SPEAKERS,MICROPHONES from rooms Where ROOM_STATUS='Available'");
                 tb.setModel(DbUtils.resultSetToTableModel(rs));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -229,7 +237,7 @@ public class Room_list extends JFrame implements ActionListener {
         } else if (!rb.isSelected()) {
             try {
                 DB db = new DB();
-                ResultSet rs = db.s.executeQuery("Select * from rooms ");
+                ResultSet rs = db.s.executeQuery("Select ROOM_NUMBER , ROOM_STATUS,MEETING_TIME,PROJECTOR,A_Cs,SPEAKERS,MICROPHONES from rooms ");
                 tb.setModel(DbUtils.resultSetToTableModel(rs));
             } catch (Exception e) {
                 e.printStackTrace();

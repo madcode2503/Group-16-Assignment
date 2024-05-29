@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import net.proteanit.sql.DbUtils;
@@ -20,13 +21,13 @@ import net.proteanit.sql.DbUtils;
 public class Client_List extends JFrame implements ActionListener {
     Choice c_id;
     JTable tb;
-    JButton search,refresh,update,cancel;
-    JMenuItem b_list,r_list,asc,des;
-    
-     Client_List(){
+    JButton search, refresh, update, cancel;
+    JMenuItem b_list, r_list, asc, des, rmv, rmvall;
+
+    Client_List() {
         getContentPane().setBackground(Color.white);
         setLayout(null);
-        JMenuBar mb= new JMenuBar();
+        JMenuBar mb = new JMenuBar();
         JMenu list = new JMenu("List");
         list.setForeground(Color.blue);
         b_list = new JMenuItem("Client booking list");
@@ -36,6 +37,14 @@ public class Client_List extends JFrame implements ActionListener {
         r_list.addActionListener(this);
         list.add(r_list);
         mb.add(list);
+        JMenu remove = new JMenu("Remove Client");
+        rmv = new JMenuItem("Remove selected client");
+        rmv.addActionListener(this);
+        remove.add(rmv);
+        rmvall = new JMenuItem("Remove all");
+        rmvall.addActionListener(this);
+        remove.add(rmvall);
+        mb.add(remove);
         JMenu sort = new JMenu("Sort");
         sort.setForeground(Color.red);
         asc = new JMenuItem("Ascending Order");
@@ -86,10 +95,10 @@ public class Client_List extends JFrame implements ActionListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        tb=new JTable();
+        tb = new JTable();
         try {
-            DB db= new DB();
-            ResultSet rs= db.s.executeQuery("Select * from clients");
+            DB db = new DB();
+            ResultSet rs = db.s.executeQuery("Select * from clients");
             tb.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,16 +110,16 @@ public class Client_List extends JFrame implements ActionListener {
         setSize(800, 500);
         setLocation(400, 100);
     }
+
     public void actionPerformed(ActionEvent ae) {
-        String msg= ae.getActionCommand();
+        String msg = ae.getActionCommand();
         if (msg.equals("Client booking list")) {
             setVisible(false);
             new Booking_list();
         } else if (msg.equals("Room list")) {
             setVisible(false);
             new Room_list();
-        }
-        else if (ae.getSource() == search) {
+        } else if (ae.getSource() == search) {
             try {
                 DB db = new DB();
                 ResultSet rs = db.s
@@ -122,15 +131,47 @@ public class Client_List extends JFrame implements ActionListener {
         } else if (ae.getSource() == refresh) {
             try {
                 DB db = new DB();
-                ResultSet rs = db.s.executeQuery("Select * from clients");
+                ResultSet rs = db.s.executeQuery("Select (C_ID,C_NAME,C_PHONE,C_COM) from clients");
                 tb.setModel(DbUtils.resultSetToTableModel(rs));
             } catch (Exception e) {
 
             }
-        } else if(ae.getSource()==update){
-              new Update_Client();
-        }
-        else if (msg.equals("Ascending Order")) {
+        } else if (ae.getSource() == update) {
+            new Update_Client();
+        } else if (msg.equals("Remove selected client")) {
+            String s_id = c_id.getSelectedItem();
+            DB db = new DB();
+            try {
+                String query = " Delete from clients where C_ID='"
+                        + s_id + "'";
+                String query2 = " Delete from booking where C_ID='"
+                        + s_id + "'";
+                String query3 = "Update id set STT='Available' where ID='" + s_id + "'";
+                String query4="Update  rooms  Set ROOM_STATUS='Available',MEETING_TIME='N/A',PROJECTOR='0',A_Cs='0',SPEAKERS='0',MICROPHONES='0',C_ID='N/A'  where C_ID ='"+s_id+"'";
+                db.s.executeUpdate(query);
+                db.s.executeUpdate(query2);
+                db.s.executeUpdate(query3);
+                db.s.executeUpdate(query4);
+                JOptionPane.showMessageDialog(null, "Removed successfully");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else if (msg.equals("Remove all")) {
+            DB db = new DB();
+            try {
+                String query = " Delete from booking ";
+                String query2 = "Delete from clients";
+                String query3 = "Update id set STT='Available'";
+                String query4="Update  rooms  Set ROOM_STATUS='Available',MEETING_TIME='N/A',PROJECTOR='0',A_Cs='0',SPEAKERS='0',MICROPHONES='0',C_ID='N/A'";
+                db.s.executeUpdate(query);
+                db.s.executeUpdate(query2);
+                db.s.executeUpdate(query3);
+                db.s.executeUpdate(query4);
+                JOptionPane.showMessageDialog(null, "Removed successfully");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else if (msg.equals("Ascending Order")) {
             try {
                 DB db = new DB();
                 ResultSet rs = db.s.executeQuery("select * from clients order by C_NAME ASC;");
@@ -146,12 +187,12 @@ public class Client_List extends JFrame implements ActionListener {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else if (ae.getSource() == cancel) {
+        } else if (ae.getSource() == cancel) {
             setVisible(false);
             new Homepage();
         }
     }
+
     public static void main(String[] args) {
         new Client_List();
     }

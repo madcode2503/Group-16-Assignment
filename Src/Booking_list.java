@@ -48,9 +48,9 @@ public class Booking_list extends JFrame implements ActionListener {
         sort.add(des);
 
         mb.add(sort);
-        JMenu remove_client = new JMenu("Remove client");
+        JMenu remove_client = new JMenu("Remove client booking");
         remove_client.setForeground(Color.blue);
-        free_1 = new JMenuItem("Remove selected client");
+        free_1 = new JMenuItem("Remove selected client booking");
         free_1.addActionListener(this);
         remove_client.add(free_1);
         free_all = new JMenuItem("Remove all");
@@ -147,12 +147,16 @@ public class Booking_list extends JFrame implements ActionListener {
             String r_num = c_num.getSelectedItem();
             DB db = new DB();
             try {
-                String query = " Delete from booking where C_ID='"
+                String query = " Delete from booking where ROOM_NUMBER='"
                         + r_num + "'";
-                String query2= "Update  rooms Set ROOM_STATUS='Available',MEETING_TIME='N/A',NUM_PROJs='0',NUM_PROJs='0',NUM_PROJs='0',NUM_ACs='0',NUM_SPKs='0',NUM_MICs='0' where ROOM_NUMBER='"
+                String query2= "Update  rooms  Set ROOM_STATUS='Available',MEETING_TIME='N/A',PROJECTOR='0',A_Cs='0',SPEAKERS='0',MICROPHONES='0',C_ID='N/A' where ROOM_NUMBER='"
                 + r_num + "'";
+                String query3="Update id i Join booking b on i.ID=b.C_ID set i.STT='Available' where b.ROOM_NUMBER='"+r_num+"'";
+                String query4= "Delete from clients where ROOM_NUMBER='"+r_num+"'";
                 db.s.executeUpdate(query);
                 db.s.executeUpdate(query2);
+                db.s.executeUpdate(query3);
+                db.s.executeUpdate(query4);
                 JOptionPane.showMessageDialog(null, "Removed successfully");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -162,9 +166,13 @@ public class Booking_list extends JFrame implements ActionListener {
             DB db = new DB();
             try {
                 String query = " Delete from booking ";
-                String query2= "Update  rooms Set ROOM_STATUS='Available',MEETING_TIME='N/A',NUM_PROJs='0',NUM_PROJs='0',NUM_PROJs='0',NUM_ACs='0',NUM_SPKs='0',NUM_MICs='0'";
+                String query2= "Update  rooms  Set ROOM_STATUS='Available',MEETING_TIME='N/A',PROJECTOR='0',A_Cs='0',SPEAKERS='0',MICROPHONES='0',C_ID='N/A'";
+                String query3= "Update id set STT='Available'";
+                String query4="Delete from clients";
                 db.s.executeUpdate(query);
                 db.s.executeUpdate(query2);
+                db.s.executeUpdate(query3);
+                db.s.executeUpdate(query4);
                 JOptionPane.showMessageDialog(null, "Removed successfully");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

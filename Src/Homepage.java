@@ -15,6 +15,7 @@ import javax.swing.JMenuItem;
 public class Homepage extends JFrame implements ActionListener {
     JMenuItem b_list,c_list,r_list,logout,exit_app;
     Homepage() {
+        
         setSize(1200, 750);
         ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("Icon\\1484_06.jpg"));
         Image i2 = i1.getImage().getScaledInstance(1200, 750, Image.SCALE_DEFAULT);
@@ -29,17 +30,17 @@ public class Homepage extends JFrame implements ActionListener {
         new_booking.addActionListener(this);
         newInformation.add(new_booking);
         mb.add(newInformation);
-        JMenu admin = new JMenu("View details");
+        JMenu list = new JMenu("Lists");
         b_list=new JMenuItem("Client booking list");
         b_list.addActionListener(this);
-        admin.add(b_list);
+        list.add(b_list);
         c_list=new JMenuItem("Client profile list");
         c_list.addActionListener(this);
-        admin.add(c_list);
+        list.add(c_list);
         r_list=new JMenuItem("Room list");
         r_list.addActionListener(this);
-        admin.add(r_list);
-        mb.add(admin);
+        list.add(r_list);
+        mb.add(list);
         JMenu exit = new JMenu("Exit");
         exit.setForeground(Color.RED);
         logout = new JMenuItem("Log out");
